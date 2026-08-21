@@ -10,10 +10,10 @@
 // ضع الرقم بالصيغة الدولية بدون +
 // مثال مصر: 201XXXXXXXXX
 // ==========================================
-const DEFAULT_CASHIER_NUMBER = '201000000000';
+const DEFAULT_CASHIER_NUMBER = '201025857442';
 
 // رمز دخول الأدمن (Frontend-only — راجع README لملاحظات الأمان)
-const ADMIN_PIN = '1234';
+const ADMIN_PIN = '2007';
 
 // المفاتيح المستخدمة في localStorage
 const STORAGE_KEYS = {
