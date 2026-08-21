@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Burger &amp; Co. — Smart Menu</title>
+<meta name="description" content="منيو Burger & Co. الذكي — اطلب في ثوانٍ">
+
+<!-- ==========================================
+     🔤 الخطوط: Cairo للعربية / Montserrat للإنجليزية
+     ========================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ==========================================
+     🔝 HEADER — الشعار + التبديل (لغة / ثيم) + قفل الأدمن
+     ========================================== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-flame">🔥</span>
+      <span class="brand-name" data-i18n="brandName">Burger &amp; Co.</span>
+    </div>
+
+    <div class="header-controls">
+      <button class="icon-btn" id="langToggle" type="button" aria-label="Toggle language">
+        <span id="langToggleLabel">EN</span>
+      </button>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle theme">
+        <svg id="themeIconMoon" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12.3 3a9 9 0 1 0 8.7 13.3A7.5 7.5 0 0 1 12.3 3z"/></svg>
+      </button>
+      <button class="icon-btn cart-btn" id="cartToggle" type="button" aria-label="Cart">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M7 4h-2l-1 2v1h2l3.6 7.6-1.4 2.5c-.3.5 0 1.2.6 1.2h11v-2H9.4l.9-1.7h6.5c.4 0 .7-.2.9-.6l3.2-6.1c.3-.5-.1-1.1-.6-1.1H6.2L5.3 4H7zm1 15a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ==========================================
+     🍔 قسم البطل — Hero
+     ========================================== -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow" data-i18n="heroEyebrow">اطلب أونلاين</p>
+    <h1 class="hero-title" data-i18n="heroTitle">شوي. صوص. سعادة.</h1>
+    <p class="hero-sub" data-i18n="heroSub">تصفح المنيو، اختر حجمك، وابعت طلبك على واتساب في ثواني.</p>
+  </div>
+  <div class="hero-flame-deco" aria-hidden="true"></div>
+</section>
+
+<!-- ==========================================
+     🍔 قسم المنتجات الرئيسية
+     ========================================== -->
+<main class="menu-main">
+
+  <!-- شريط التصنيفات -->
+  <nav class="category-bar" id="categoryBar" role="tablist" aria-label="Categories"></nav>
+
+  <!-- Stacked Card Slider لكل تصنيف -->
+  <section class="slider-section" id="sliderSection">
+    <div class="slider-stage" id="sliderStage"></div>
+    <div class="slider-controls">
+      <button class="slider-nav prev" id="sliderPrev" type="button" aria-label="Previous">‹</button>
+      <div class="slider-dots" id="sliderDots"></div>
+      <button class="slider-nav next" id="sliderNext" type="button" aria-label="Next">›</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==========================================
+     🛒 سلة الطلبات — Drawer
+     ========================================== -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+  <div class="cart-header">
+    <h2 data-i18n="cartTitle">سلة الطلبات</h2>
+    <button class="icon-btn" id="cartClose" type="button" aria-label="Close cart">✕</button>
+  </div>
+
+  <div class="cart-body" id="cartBody">
+    <p class="cart-empty" id="cartEmpty" data-i18n="cartEmptyMsg">السلة فاضية دلوقتي 🍔</p>
+    <ul class="cart-list" id="cartList"></ul>
+  </div>
+
+  <div class="cart-footer">
+    <label class="table-field">
+      <span data-i18n="tableNumber">رقم الطاولة</span>
+      <input type="number" id="tableNumberInput" min="1" placeholder="مثال: 12" inputmode="numeric">
+    </label>
+
+    <div class="cart-total-row">
+      <span data-i18n="total">الإجمالي</span>
+      <span id="cartTotal">0 EGP</span>
+    </div>
+
+    <button class="btn-primary send-order-btn" id="sendOrderBtn" type="button">
+      <span data-i18n="sendOrder">إرسال الطلب عبر واتساب</span>
+    </button>
+    <p class="cart-error" id="cartError"></p>
+  </div>
+</aside>
+
+<!-- ==========================================
+     📏 Modal اختيار الحجم
+     ========================================== -->
+<div class="modal-overlay" id="sizeModalOverlay">
+  <div class="modal size-modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="sizeModalClose" type="button" aria-label="Close">✕</button>
+    <img id="sizeModalImg" class="size-modal-img" src="" alt="">
+    <h3 id="sizeModalName"></h3>
+    <p class="modal-label" data-i18n="selectSize">اختر الحجم</p>
+    <div class="size-options" id="sizeOptions"></div>
+    <button class="btn-primary" id="sizeModalAdd" type="button" data-i18n="addToCart">أضف للسلة</button>
+  </div>
+</div>
+
+<!-- ==========================================
+     🔐 Admin — Login + Dashboard
+     ========================================== -->
+<div class="modal-overlay" id="adminLoginOverlay">
+  <div class="modal admin-login-modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="adminLoginClose" type="button" aria-label="Close">✕</button>
+    <h3 data-i18n="adminLogin">تسجيل دخول الأدمن</h3>
+    <label class="table-field">
+      <span data-i18n="pinLabel">أدخل الرمز السري</span>
+      <input type="password" id="adminPinInput" inputmode="numeric" placeholder="••••">
+    </label>
+    <p class="cart-error" id="adminLoginError"></p>
+    <button class="btn-primary" id="adminLoginSubmit" type="button" data-i18n="login">دخول</button>
+    <p class="admin-note" data-i18n="adminSecurityNote">ملاحظة: هذا القفل لتنظيم الواجهة فقط وليس نظام حماية حقيقي.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="adminDashOverlay">
+  <div class="modal admin-dash-modal" role="dialog" aria-modal="true">
+    <div class="admin-dash-header">
+      <h3 data-i18n="adminDashboard">لوحة تحكم الأدمن</h3>
+      <div>
+        <button class="btn-secondary" id="adminLogoutBtn" type="button" data-i18n="logout">خروج</button>
+        <button class="modal-close" id="adminDashClose" type="button" aria-label="Close">✕</button>
+      </div>
+    </div>
+
+    <div class="admin-tabs" id="adminTabs">
+      <button class="admin-tab active" data-tab="products" data-i18n="tabProducts">المنتجات</button>
+      <button class="admin-tab" data-tab="categories" data-i18n="tabCategories">التصنيفات</button>
+      <button class="admin-tab" data-tab="settings" data-i18n="tabSettings">الإعدادات</button>
+    </div>
+
+    <div class="admin-panel" id="adminPanelProducts">
+      <button class="btn-primary small" id="addProductBtn" type="button" data-i18n="addProduct">+ إضافة منتج</button>
+      <div class="admin-product-list" id="adminProductList"></div>
+    </div>
+
+    <div class="admin-panel hidden" id="adminPanelCategories">
+      <button class="btn-primary small" id="addCategoryBtn" type="button" data-i18n="addCategory">+ إضافة تصنيف</button>
+      <div class="admin-category-list" id="adminCategoryList"></div>
+    </div>
+
+    <div class="admin-panel hidden" id="adminPanelSettings">
+      <label class="table-field">
+        <span data-i18n="cashierNumberLabel">رقم واتساب الكاشير (دولي، بدون +)</span>
+        <input type="text" id="cashierNumberInput" placeholder="201XXXXXXXXX">
+      </label>
+      <label class="table-field">
+        <span data-i18n="logoLabel">رابط شعار المطعم (اختياري)</span>
+        <input type="text" id="logoUrlInput" placeholder="https://...">
+      </label>
+      <button class="btn-primary small" id="saveSettingsBtn" type="button" data-i18n="save">حفظ</button>
+      <p class="save-confirm" id="settingsSaveConfirm"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     ✏️ Modal تعديل / إضافة منتج (Admin)
+     ========================================== -->
+<div class="modal-overlay" id="productEditOverlay">
+  <div class="modal product-edit-modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="productEditClose" type="button" aria-label="Close">✕</button>
+    <h3 id="productEditTitle" data-i18n="editProduct">تعديل المنتج</h3>
+
+    <label class="table-field">
+      <span data-i18n="productNameAr">اسم المنتج (عربي)</span>
+      <input type="text" id="editNameAr">
+    </label>
+    <label class="table-field">
+      <span data-i18n="productNameEn">اسم المنتج (إنجليزي)</span>
+      <input type="text" id="editNameEn">
+    </label>
+    <label class="table-field">
+      <span data-i18n="productCategory">التصنيف</span>
+      <select id="editCategory"></select>
+    </label>
+    <label class="table-field">
+      <span data-i18n="productImage">رابط الصورة</span>
+      <input type="text" id="editImage">
+    </label>
+
+    <div class="edit-sizes" id="editSizesWrap">
+      <span class="table-field-label" data-i18n="sizesPrices">الأحجام والأسعار (EGP)</span>
+      <div id="editSizesList"></div>
+      <button class="btn-secondary small" id="addSizeRowBtn" type="button" data-i18n="addSize">+ إضافة حجم</button>
+    </div>
+
+    <label class="toggle-field">
+      <input type="checkbox" id="editEnabled" checked>
+      <span data-i18n="enabled">مفعل</span>
+    </label>
+
+    <div class="product-edit-actions">
+      <button class="btn-primary" id="productEditSave" type="button" data-i18n="save">حفظ</button>
+      <button class="btn-danger" id="productEditDelete" type="button" data-i18n="delete">حذف</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     🦶 Footer — قفل الأدمن
+     ========================================== -->
+<footer class="site-footer">
+  <p data-i18n="footerText">Burger &amp; Co. — Made with 🔥 in Damietta</p>
+  <button class="admin-lock-btn" id="adminLockBtn" type="button" aria-label="Admin login">🔒</button>
+</footer>
+
+<!-- ==========================================
+     🍞 Toast — رسائل تأكيد سريعة
+     ========================================== -->
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
